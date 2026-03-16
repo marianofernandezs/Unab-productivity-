@@ -1,4 +1,4 @@
-import { Note } from '../../types';
+import type { Note } from '../../types';
 import { useStore } from '../../store';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';

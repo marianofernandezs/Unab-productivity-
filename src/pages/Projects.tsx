@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useStore } from '../store';
-import { Project, ProjectStatus } from '../types';
+import type { Project, ProjectStatus } from '../types';
 import ProjectCard from '../components/projects/ProjectCard';
 import ProjectForm from '../components/projects/ProjectForm';
 import ProjectDetail from '../components/projects/ProjectDetail';

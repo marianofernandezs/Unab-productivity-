@@ -1,5 +1,5 @@
 import { useStore } from '../../store';
-import { Project } from '../../types';
+import type { Project } from '../../types';
 import TaskList from './TaskList';
 import { differenceInDays, parseISO, format } from 'date-fns';
 import { es } from 'date-fns/locale';

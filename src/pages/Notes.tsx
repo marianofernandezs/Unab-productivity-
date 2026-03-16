@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store';
-import { Note } from '../types';
+import type { Note } from '../types';
 import NoteForm from '../components/notes/NoteForm';
 import NoteCard from '../components/notes/NoteCard';
 import { Plus, Search, Tag, Filter } from 'lucide-react';

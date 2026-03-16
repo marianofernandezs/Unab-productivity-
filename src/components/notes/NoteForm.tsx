@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useStore } from '../../store';
-import { Note } from '../../types';
+import type { Note } from '../../types';
 import { X, Tag } from 'lucide-react';
 
 interface NoteFormProps {

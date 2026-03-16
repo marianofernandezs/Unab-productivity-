@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useStore } from '../../store';
-import { Project, ProjectStatus } from '../../types';
+import type { Project, ProjectStatus } from '../../types';
 import { X } from 'lucide-react';
 
 interface ProjectFormProps {

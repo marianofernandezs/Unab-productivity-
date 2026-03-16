@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { AppState, Project, Task, PomodoroSession, Note, UserActivity } from '../types';
+import type { AppState, Project, Task, PomodoroSession, Note, UserActivity } from '../types';
 
 // Helper to generate IDs
 const generateId = () => Math.random().toString(36).substr(2, 9);
