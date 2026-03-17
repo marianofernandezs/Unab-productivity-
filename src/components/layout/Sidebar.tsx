@@ -1,8 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, Clock, StickyNote, Moon, Sun, X, LogOut } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, Clock, StickyNote, Moon, Sun, X, LogOut, Download } from 'lucide-react';
 import { useStore } from '../../store';
 import { cn } from '../../lib/utils';
 import { supabase } from '../../lib/supabase';
+import { buildExportData, downloadJson } from '../../lib/exportData';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -10,7 +11,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const { isDarkMode, toggleDarkMode } = useStore();
+  const { isDarkMode, toggleDarkMode, projects, tasks, pomodoros, notes } = useStore();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -18,11 +19,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     navigate('/login');
   };
 
+  const handleExport = () => {
+    const data = buildExportData({ projects, tasks, pomodoros, notes });
+    downloadJson(data);
+  };
+
   const navItems = [
     { name: 'Dashboard', path: '/', icon: <LayoutDashboard size={20} /> },
-    { name: 'Projects', path: '/projects', icon: <CheckSquare size={20} /> },
+    { name: 'Proyectos', path: '/projects', icon: <CheckSquare size={20} /> },
     { name: 'Pomodoro', path: '/pomodoro', icon: <Clock size={20} /> },
-    { name: 'Notes', path: '/notes', icon: <StickyNote size={20} /> },
+    { name: 'Notas', path: '/notes', icon: <StickyNote size={20} /> },
   ];
 
   return (
@@ -58,6 +64,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <NavLink
               key={item.path}
               to={item.path}
+              end={item.path === '/'}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
@@ -73,20 +80,32 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-border space-y-2 mt-auto">
+        <div className="p-4 border-t border-border space-y-1 mt-auto">
+          {/* Export */}
           <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-destructive hover:bg-destructive/10 transition-all duration-200"
+            onClick={handleExport}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all duration-200"
           >
-            <LogOut size={20} />
-            <span className="font-medium">Cerrar Sesión</span>
+            <Download size={20} />
+            <span className="font-medium">Exportar Datos</span>
           </button>
+
+          {/* Dark mode toggle */}
           <button
             onClick={toggleDarkMode}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all duration-200"
           >
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             <span className="font-medium">{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+          </button>
+
+          {/* Logout */}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-destructive hover:bg-destructive/10 transition-all duration-200"
+          >
+            <LogOut size={20} />
+            <span className="font-medium">Cerrar Sesión</span>
           </button>
         </div>
       </div>

@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useStore } from '../store';
-import { Play, Pause, RotateCcw, SkipForward, Coffee, BrainCircuit, History } from 'lucide-react';
+import { Play, Pause, RotateCcw, SkipForward, Coffee, BrainCircuit, History, Volume2, VolumeX } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -11,8 +11,29 @@ const SHORT_BREAK_TIME = 5 * 60;
 const LONG_BREAK_TIME = 15 * 60;
 const CYCLES_BEFORE_LONG_BREAK = 4;
 
+/** Generates a pleasant bell-like chime via Web Audio API */
+function playChime(audioCtx: AudioContext) {
+  const frequencies = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+  frequencies.forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.18);
+
+    gain.gain.setValueAtTime(0, audioCtx.currentTime + i * 0.18);
+    gain.gain.linearRampToValueAtTime(0.35, audioCtx.currentTime + i * 0.18 + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.18 + 0.8);
+
+    osc.start(audioCtx.currentTime + i * 0.18);
+    osc.stop(audioCtx.currentTime + i * 0.18 + 0.8);
+  });
+}
+
 export default function Pomodoro() {
-  const { projects, addPomodoro, pomodoros } = useStore();
+  const { projects, addPomodoro, pomodoros, isSoundEnabled, toggleSound } = useStore();
   
   const [timeLeft, setTimeLeft] = useState(WORK_TIME);
   const [isRunning, setIsRunning] = useState(false);
@@ -20,10 +41,17 @@ export default function Pomodoro() {
   const [cycle, setCycle] = useState(1);
   const [selectedProjectId, setSelectedProjectId] = useState<string>('');
   
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // AudioContext is created lazily on first user interaction
+  const audioCtxRef = useRef<AudioContext | null>(null);
 
-  useEffect(() => {
-    audioRef.current = new Audio('/notification.mp3');
+  // Ensure AudioContext exists (browsers require user gesture)
+  const ensureAudioCtx = useCallback(() => {
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    if (audioCtxRef.current.state === 'suspended') {
+      audioCtxRef.current.resume();
+    }
   }, []);
 
   useEffect(() => {
@@ -36,11 +64,13 @@ export default function Pomodoro() {
     return () => clearInterval(interval);
   }, [isRunning, timeLeft]);
 
-  const playNotification = () => {
-    if (audioRef.current) {
-      audioRef.current.play().catch(() => {});
+  const playNotification = useCallback(() => {
+    if (!isSoundEnabled) return;
+    ensureAudioCtx();
+    if (audioCtxRef.current) {
+      playChime(audioCtxRef.current);
     }
-  };
+  }, [isSoundEnabled, ensureAudioCtx]);
 
   const handlePhaseComplete = () => {
     setIsRunning(false);
@@ -90,6 +120,12 @@ export default function Pomodoro() {
     else setTimeLeft(LONG_BREAK_TIME);
   };
 
+  const handleStartStop = () => {
+    // Unlock AudioContext on first user interaction with the play button
+    ensureAudioCtx();
+    setIsRunning(!isRunning);
+  };
+
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
@@ -113,9 +149,24 @@ export default function Pomodoro() {
       
       {/* Left Column: Timer */}
       <div className="xl:w-2/3 flex flex-col gap-6 md:gap-8">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-black text-foreground">Pomodoro</h1>
-          <p className="text-muted-foreground mt-1 md:mt-2 font-medium text-sm md:text-base">Mantén el enfoque y gestiona tus tiempos de descanso.</p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-black text-foreground">Pomodoro</h1>
+            <p className="text-muted-foreground mt-1 md:mt-2 font-medium text-sm md:text-base">Mantén el enfoque y gestiona tus tiempos de descanso.</p>
+          </div>
+          {/* Sound toggle */}
+          <button
+            onClick={toggleSound}
+            title={isSoundEnabled ? 'Desactivar sonido' : 'Activar sonido'}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all text-sm font-medium ${
+              isSoundEnabled
+                ? 'bg-primary/10 text-primary border-primary/30 hover:bg-primary/20'
+                : 'bg-secondary text-muted-foreground border-border hover:bg-secondary/80'
+            }`}
+          >
+            {isSoundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+            <span className="hidden sm:inline">{isSoundEnabled ? 'Sonido On' : 'Sonido Off'}</span>
+          </button>
         </div>
 
         <div className="bg-card p-6 sm:p-10 rounded-3xl border border-border shadow-xl flex flex-col items-center flex-1 justify-center relative overflow-hidden">
@@ -192,7 +243,7 @@ export default function Pomodoro() {
               </button>
               
               <button
-                onClick={() => setIsRunning(!isRunning)}
+                onClick={handleStartStop}
                 className={`px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-black text-white text-base sm:text-lg transition-transform hover:scale-105 active:scale-95 flex-[2] flex items-center justify-center gap-2 shadow-xl ${isRunning ? 'bg-destructive/90 shadow-destructive/20' : phase === 'work' ? 'bg-primary/90 shadow-primary/20' : 'bg-green-500/90 shadow-green-500/20'}`}
               >
                 {isRunning ? <Pause size={22} fill="currentColor" /> : <Play size={22} fill="currentColor" />}

@@ -49,6 +49,7 @@ export interface UserActivity {
 export interface AppState {
   userName: string;
   isDarkMode: boolean;
+  isSoundEnabled: boolean;
   projects: Project[];
   tasks: Task[];
   pomodoros: PomodoroSession[];
@@ -61,6 +62,7 @@ export interface AppState {
   setUserName: (name: string) => void;
   setSession: (session: any | null) => void;
   toggleDarkMode: () => void;
+  toggleSound: () => void;
   
   // Project Actions
   addProject: (project: Omit<Project, 'id' | 'createdAt'>) => void;

@@ -9,6 +9,7 @@ export const useStore = create<AppState>()(
   (set, get) => ({
     userName: 'Usuario',
     isDarkMode: false,
+    isSoundEnabled: true,
     session: null,
     projects: [],
     tasks: [],
@@ -115,6 +116,10 @@ export const useStore = create<AppState>()(
       if (session) {
          await supabase.from('unbpd_profiles').upsert({ id: session.user.id, is_dark_mode: newMode });
       }
+    },
+
+    toggleSound: () => {
+      set((state) => ({ isSoundEnabled: !state.isSoundEnabled }));
     },
 
     logActivity: async (type, description) => {
