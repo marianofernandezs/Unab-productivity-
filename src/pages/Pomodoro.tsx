@@ -115,7 +115,7 @@ export default function Pomodoro() {
   const totalFocusHours = (pomodoros.reduce((acc, p) => acc + p.durationMinutes, 0) / 60).toFixed(1);
 
   return (
-    <div className="p-8 max-w-[1600px] mx-auto min-h-full flex flex-col xl:flex-row gap-8 animate-in fade-in duration-500">
+    <div className="p-4 md:p-8 max-w-[1600px] mx-auto min-h-full flex flex-col xl:flex-row gap-8 animate-in fade-in duration-500">
       
       {/* Left Column: Timer */}
       <div className="xl:w-2/3 flex flex-col gap-8">
@@ -126,28 +126,28 @@ export default function Pomodoro() {
 
         <div className="bg-card p-10 rounded-3xl border border-border shadow-xl flex flex-col items-center flex-1 justify-center relative overflow-hidden">
           
-          <div className="flex gap-4 mb-12 p-1.5 bg-secondary/50 rounded-2xl">
+          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mb-8 md:mb-12 p-1.5 bg-secondary/50 rounded-2xl w-full max-w-sm mx-auto">
             <button
               onClick={() => { setPhase('work'); setTimeLeft(WORK_TIME); setIsRunning(false); }}
-              className={`px-6 py-2.5 rounded-xl font-bold transition-all ${phase === 'work' ? 'bg-primary text-primary-foreground shadow-md' : 'text-muted-foreground hover:bg-secondary'}`}
+              className={`px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-bold transition-all flex-1 text-sm md:text-base ${phase === 'work' ? 'bg-primary text-primary-foreground shadow-md' : 'text-muted-foreground hover:bg-secondary'}`}
             >
               Enfoque
             </button>
             <button
               onClick={() => { setPhase('shortBreak'); setTimeLeft(SHORT_BREAK_TIME); setIsRunning(false); }}
-              className={`px-6 py-2.5 rounded-xl font-bold transition-all ${phase === 'shortBreak' ? 'bg-green-500 text-white shadow-md' : 'text-muted-foreground hover:bg-secondary'}`}
+              className={`px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-bold transition-all flex-1 text-sm md:text-base ${phase === 'shortBreak' ? 'bg-green-500 text-white shadow-md' : 'text-muted-foreground hover:bg-secondary'}`}
             >
-              Pausa Corta
+              Corta
             </button>
             <button
               onClick={() => { setPhase('longBreak'); setTimeLeft(LONG_BREAK_TIME); setIsRunning(false); }}
-              className={`px-6 py-2.5 rounded-xl font-bold transition-all ${phase === 'longBreak' ? 'bg-blue-500 text-white shadow-md' : 'text-muted-foreground hover:bg-secondary'}`}
+              className={`px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-bold transition-all flex-1 text-sm md:text-base ${phase === 'longBreak' ? 'bg-blue-500 text-white shadow-md' : 'text-muted-foreground hover:bg-secondary'}`}
             >
-              Pausa Larga
+              Larga
             </button>
           </div>
 
-          <div className="relative w-80 h-80 flex items-center justify-center mb-12 transform hover:scale-105 transition-transform duration-500">
+          <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center mb-8 md:mb-12 transform hover:scale-105 transition-transform duration-500">
             {/* Background Circle */}
             <svg className="absolute w-full h-full -rotate-90" viewBox="0 0 100 100">
               <circle
@@ -170,7 +170,7 @@ export default function Pomodoro() {
             </svg>
             
             <div className="flex flex-col items-center z-10">
-              <span className="text-7xl font-sans font-black tracking-tighter text-foreground tabular-nums drop-shadow-sm">
+              <span className="text-5xl md:text-7xl font-sans font-black tracking-tighter text-foreground tabular-nums drop-shadow-sm">
                 {formatTime(timeLeft)}
               </span>
               <div className="flex items-center gap-2 mt-4 text-muted-foreground font-medium">

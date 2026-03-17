@@ -10,13 +10,13 @@ export default function Dashboard() {
   const [filter, setFilter] = useState<'week' | 'month' | 'all'>('week');
 
   return (
-    <div className="p-8 max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="p-4 md:p-8 max-w-[1600px] mx-auto space-y-6 md:space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex-1">
+        <div className="flex-1 w-full relative">
           <Greeting />
         </div>
-        <div className="bg-card p-1 rounded-xl border border-border inline-flex shrink-0 shadow-sm h-fit self-end md:self-auto h-[76px] items-center px-4">
-          <div className="flex gap-2">
+        <div className="bg-card p-1.5 rounded-2xl border border-border inline-flex shrink-0 shadow-sm h-fit items-center w-full md:w-auto overflow-x-auto mx-auto scrollbar-hide">
+          <div className="flex gap-1 w-full justify-start md:justify-center">
             {[
               { id: 'week', label: 'Esta Semana' },
               { id: 'month', label: 'Este Mes' },
@@ -36,10 +36,10 @@ export default function Dashboard() {
 
       <KPIs filter={filter} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        <div className="lg:col-span-2 xl:col-span-3 flex flex-col gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+        <div className="lg:col-span-2 xl:col-span-3 flex flex-col gap-6 md:gap-8">
            <ActivityChart />
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
              <CriticalProjects />
              <CompactPomodoro />
            </div>

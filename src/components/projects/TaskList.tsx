@@ -55,7 +55,7 @@ function SortableTaskItem({ task }: SortableTaskItemProps) {
 
       <button 
         onClick={removeStatus} 
-        className="text-muted-foreground hover:bg-destructive hover:text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all font-medium"
+        className="text-muted-foreground hover:bg-destructive hover:text-white p-2 rounded-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all font-medium"
       >
         <Trash2 size={16} />
       </button>

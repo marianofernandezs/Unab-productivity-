@@ -38,7 +38,7 @@ export default function Notes() {
   }).sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime());
 
   return (
-    <div className="p-8 max-w-[1600px] mx-auto min-h-full flex flex-col animate-in fade-in duration-500">
+    <div className="p-4 md:p-8 max-w-[1600px] mx-auto min-h-full flex flex-col animate-in fade-in duration-500">
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>

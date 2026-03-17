@@ -58,7 +58,7 @@ export default function Projects() {
   }, [projects, filterState, sortBy, tasks]);
 
   return (
-    <div className="p-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+    <div className="p-4 md:p-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-4xl font-black text-foreground">Proyectos</h1>

@@ -54,9 +54,12 @@ export interface AppState {
   pomodoros: PomodoroSession[];
   notes: Note[];
   activityFeed: UserActivity[];
+  session: any | null; // From supabase auth
   
   // Actions
+  fetchData: () => Promise<void>;
   setUserName: (name: string) => void;
+  setSession: (session: any | null) => void;
   toggleDarkMode: () => void;
   
   // Project Actions

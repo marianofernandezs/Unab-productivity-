@@ -101,7 +101,7 @@ export default function ProjectForm({ onClose, projectToEdit }: ProjectFormProps
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Fecha Límite *</label>
               <input 

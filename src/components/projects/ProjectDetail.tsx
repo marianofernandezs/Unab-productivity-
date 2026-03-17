@@ -19,8 +19,8 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
   const daysLeft = differenceInDays(parseISO(project.deadline), new Date());
   
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex py-8 px-4 justify-center items-center overflow-hidden h-screen text-left">
-      <div className="bg-background w-full max-w-5xl rounded-3xl shadow-2xl border border-border flex flex-col md:flex-row overflow-hidden relative animate-in slide-in-from-bottom-8 duration-300 max-h-[95vh]">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex py-4 md:py-8 px-4 justify-center items-center overflow-hidden h-screen text-left">
+      <div className="bg-background w-full max-w-5xl rounded-3xl shadow-2xl border border-border flex flex-col md:flex-row overflow-y-auto md:overflow-hidden relative animate-in slide-in-from-bottom-8 duration-300 max-h-[95vh]">
         
         <button 
           onClick={onClose}
@@ -31,7 +31,7 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
 
         {/* Info Panel */}
         <div 
-          className="w-full md:w-2/5 p-8 border-r border-border shrink-0 flex flex-col relative overflow-y-auto"
+          className="w-full md:w-2/5 p-6 md:p-8 border-b md:border-b-0 md:border-r border-border shrink-0 flex flex-col relative md:overflow-y-auto"
           style={{ backgroundImage: `linear-gradient(to bottom right, ${project.color}10, transparent)` }}
         >
           <button 
@@ -95,7 +95,7 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
         </div>
 
         {/* Tasks Panel */}
-        <div className="flex-1 bg-secondary/30 p-4 md:p-8 flex flex-col h-full overflow-hidden min-h-[500px]">
+        <div className="flex-1 bg-secondary/30 p-4 md:p-8 flex flex-col md:h-full md:overflow-hidden min-h-[500px]">
           <TaskList projectId={project.id} />
         </div>
         
