@@ -19,75 +19,72 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
   const daysLeft = differenceInDays(parseISO(project.deadline), new Date());
   
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex py-4 md:py-8 px-4 justify-center items-center overflow-hidden h-screen text-left">
-      <div className="bg-background w-full max-w-5xl rounded-3xl shadow-2xl border border-border flex flex-col md:flex-row overflow-y-auto md:overflow-hidden relative animate-in slide-in-from-bottom-8 duration-300 max-h-[95vh]">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex py-0 md:py-6 px-0 md:px-4 justify-center items-end md:items-center overflow-hidden h-screen text-left">
+      <div className="bg-background w-full max-w-5xl rounded-t-3xl md:rounded-3xl shadow-2xl border border-border flex flex-col md:flex-row overflow-y-auto md:overflow-hidden relative animate-in slide-in-from-bottom-8 duration-300 max-h-[92vh] md:max-h-[90vh]">
         
+        {/* Close button (always visible top right) */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:bg-secondary p-2 rounded-full transition-colors z-20 md:hidden"
+          className="absolute top-4 right-4 text-muted-foreground hover:bg-secondary p-2 rounded-full transition-colors z-20"
         >
-          <X size={24} />
+          <X size={22} />
         </button>
 
         {/* Info Panel */}
         <div 
-          className="w-full md:w-2/5 p-6 md:p-8 border-b md:border-b-0 md:border-r border-border shrink-0 flex flex-col relative md:overflow-y-auto"
+          className="w-full md:w-2/5 p-5 md:p-8 border-b md:border-b-0 md:border-r border-border shrink-0 flex flex-col relative"
           style={{ backgroundImage: `linear-gradient(to bottom right, ${project.color}10, transparent)` }}
         >
-          <button 
-            onClick={onClose}
-            className="absolute top-4 right-4 text-muted-foreground hover:bg-foreground/10 p-2 rounded-full transition-colors z-20 hidden md:block"
-          >
-            <X size={24} />
-          </button>
+          <div className="w-12 h-1.5 rounded-full mb-5" style={{ backgroundColor: project.color }} />
           
-          <div className="w-16 h-2 rounded-full mb-6" style={{ backgroundColor: project.color }} />
+          <h2 className="text-2xl md:text-4xl font-black text-foreground mb-3 leading-tight pr-8">{project.name}</h2>
           
-          <h2 className="text-4xl font-black text-foreground mb-4 leading-tight">{project.name}</h2>
-          
-          <p className="text-muted-foreground leading-relaxed text-lg mb-8 bg-card/50 p-4 rounded-xl border border-border">
+          <p className="text-muted-foreground leading-relaxed text-sm md:text-lg mb-6 bg-card/50 p-3 md:p-4 rounded-xl border border-border">
             {project.description || 'Sin descripción detallada.'}
           </p>
           
-          <div className="space-y-6 mt-auto border-t border-border pt-6">
-            <div className="flex items-center gap-4 bg-card p-4 rounded-2xl border border-border">
-              <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center">
-                <Calendar className="text-orange-500" size={24} />
+          <div className="space-y-3 md:space-y-4 mt-auto border-t border-border pt-5">
+            {/* Deadline */}
+            <div className="flex items-center gap-3 bg-card p-3 md:p-4 rounded-2xl border border-border">
+              <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
+                <Calendar className="text-orange-500" size={20} />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Fecha Límite</p>
-                <p className="font-bold text-foreground">{format(parseISO(project.deadline), 'dd MMMM yyyy', { locale: es })}</p>
+                <p className="text-xs font-medium text-muted-foreground">Fecha Límite</p>
+                <p className="font-bold text-foreground text-sm md:text-base">{format(parseISO(project.deadline), 'dd MMMM yyyy', { locale: es })}</p>
                 <p className={`text-xs mt-0.5 font-bold ${daysLeft < 0 ? 'text-destructive' : 'text-blue-500'}`}>
                   {daysLeft < 0 ? '¡Vencido!' : `Quedan ${daysLeft} días`}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 bg-card p-4 rounded-2xl border border-border">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                <Flag className="text-purple-500" size={24} />
+            {/* Status */}
+            <div className="flex items-center gap-3 bg-card p-3 md:p-4 rounded-2xl border border-border">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
+                <Flag className="text-purple-500" size={20} />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Estado</p>
-                <p className="font-bold text-foreground capitalize">
+                <p className="text-xs font-medium text-muted-foreground">Estado</p>
+                <p className="font-bold text-foreground capitalize text-sm md:text-base">
                   {project.status === 'active' ? 'Activo' : project.status === 'completed' ? 'Completado' : 'En Pausa'}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 bg-card p-4 rounded-2xl border border-border overflow-hidden relative">
+            {/* Progress */}
+            <div className="flex items-center gap-3 bg-card p-3 md:p-4 rounded-2xl border border-border overflow-hidden relative">
               <div 
                 className="absolute left-0 bottom-0 h-1 transition-all duration-1000"
                 style={{ width: `${progress}%`, backgroundColor: project.color }}
               />
-              <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
-                <Activity className="text-green-500" size={24} />
+              <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
+                <Activity className="text-green-500" size={20} />
               </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-muted-foreground">Progreso</p>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-muted-foreground">Progreso</p>
                 <div className="flex justify-between items-baseline">
-                  <p className="font-bold text-foreground text-2xl">{progress}%</p>
-                  <p className="text-xs text-muted-foreground font-medium">{completedTasks.length} de {projectTasks.length} tareas</p>
+                  <p className="font-bold text-foreground text-xl md:text-2xl">{progress}%</p>
+                  <p className="text-xs text-muted-foreground font-medium">{completedTasks.length}/{projectTasks.length} tareas</p>
                 </div>
               </div>
             </div>
@@ -95,7 +92,7 @@ export default function ProjectDetail({ project, onClose }: ProjectDetailProps) 
         </div>
 
         {/* Tasks Panel */}
-        <div className="flex-1 bg-secondary/30 p-4 md:p-8 flex flex-col md:h-full md:overflow-hidden min-h-[500px]">
+        <div className="flex-1 bg-secondary/30 p-4 md:p-8 flex flex-col min-h-[300px] md:h-full md:overflow-hidden">
           <TaskList projectId={project.id} />
         </div>
         

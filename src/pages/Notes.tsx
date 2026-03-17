@@ -18,7 +18,6 @@ export default function Notes() {
 
   const palette = isDarkMode ? DARK_COLORS : COLORS;
 
-  // Extract all unique tags
   const allTags = Array.from(new Set(notes.flatMap(n => n.tags || [])));
 
   const handleCreate = () => {
@@ -40,90 +39,96 @@ export default function Notes() {
   return (
     <div className="p-4 md:p-8 max-w-[1600px] mx-auto min-h-full flex flex-col animate-in fade-in duration-500">
       
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
         <div>
-          <h1 className="text-4xl font-black text-foreground">Notas Rápidas</h1>
-          <p className="text-muted-foreground mt-2 font-medium">Guarda ideas, enlaces y recordatorios puntuales.</p>
+          <h1 className="text-3xl md:text-4xl font-black text-foreground">Notas Rápidas</h1>
+          <p className="text-muted-foreground mt-1 font-medium text-sm md:text-base">Guarda ideas, enlaces y recordatorios puntuales.</p>
         </div>
         
         <button 
           onClick={handleCreate}
-          className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all font-bold shadow-lg shadow-primary/30 w-full md:w-auto hover:-translate-y-1"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all font-bold shadow-lg shadow-primary/30 w-full sm:w-auto hover:-translate-y-0.5"
         >
           <Plus size={20} /> Nueva Nota
         </button>
       </div>
 
-      <div className="bg-card p-2 rounded-2xl border border-border shadow-sm flex flex-col lg:flex-row gap-4 mb-8">
-        <div className="flex-1 relative flex items-center">
-          <Search className="absolute left-4 text-muted-foreground" size={20} />
+      {/* Search + Filters */}
+      <div className="bg-card rounded-2xl border border-border shadow-sm mb-6 md:mb-8 overflow-hidden">
+        {/* Search row */}
+        <div className="flex items-center px-4 py-3 border-b border-border">
+          <Search className="text-muted-foreground shrink-0" size={18} />
           <input
             type="text"
             placeholder="Buscar en título o contenido..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground font-medium"
+            className="flex-1 pl-3 pr-2 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground font-medium text-sm"
           />
         </div>
-        
-        <div className="w-px bg-border hidden lg:block" />
-        
-        <div className="flex gap-4 items-center px-4 py-2 lg:py-0 overflow-x-auto scroolbar-hide shrink-0">
-          <Filter className="text-muted-foreground" size={18} />
-          <div className="flex gap-2 items-center border-r border-border pr-6">
+
+        {/* Filter row */}
+        <div className="flex flex-wrap items-center gap-3 px-4 py-3">
+          <Filter className="text-muted-foreground shrink-0" size={16} />
+
+          {/* Tag filter */}
+          <div className="flex items-center gap-1.5 border-r border-border pr-4">
             <select
               value={selectedTag || ''}
               onChange={e => setSelectedTag(e.target.value || null)}
-              className="bg-transparent text-sm font-bold text-foreground outline-none cursor-pointer hover:bg-secondary py-1.5 px-3 rounded-lg w-32 truncate"
+              className="bg-transparent text-sm font-bold text-foreground outline-none cursor-pointer"
             >
               <option value="">Todas las etiquetas</option>
               {allTags.map(t => (
                 <option key={t} value={t}>{t}</option>
               ))}
             </select>
-            <Tag size={16} className="text-muted-foreground opacity-50" />
+            <Tag size={14} className="text-muted-foreground opacity-50 shrink-0" />
           </div>
 
-          <div className="flex gap-1 items-center pl-2 shrink-0">
+          {/* Color filter */}
+          <div className="flex gap-1.5 items-center flex-wrap">
             <button
               onClick={() => setSelectedColor(null)}
-              className={`w-8 h-8 rounded-full border-2 transition-transform flex items-center justify-center ${selectedColor === null ? 'border-primary ring-2 ring-primary/20 scale-110' : 'border-border text-muted-foreground hover:scale-110'}`}
-              title="Cualquier color"
+              className={`w-7 h-7 rounded-full border-2 transition-transform flex items-center justify-center text-[9px] font-bold uppercase ${selectedColor === null ? 'border-primary ring-2 ring-primary/20 scale-110' : 'border-border text-muted-foreground hover:scale-110'}`}
+              title="Todos los colores"
             >
-              <b className="text-[10px] uppercase">All</b>
+              All
             </button>
             {palette.map(c => (
               <button
                 key={c}
                 onClick={() => setSelectedColor(c)}
-                className={`w-8 h-8 rounded-full border-2 transition-transform ${selectedColor === c ? 'scale-110' : 'border-transparent hover:scale-110'}`}
+                className={`w-7 h-7 rounded-full border-2 transition-transform ${selectedColor === c ? 'scale-110' : 'border-transparent hover:scale-110'}`}
                 style={{ backgroundColor: c, borderColor: selectedColor === c ? 'var(--foreground)' : 'transparent' }}
-                title={`Filtrar por color ${c}`}
+                title={`Filtrar por color`}
               />
             ))}
           </div>
         </div>
       </div>
 
+      {/* Notes Grid */}
       <div className="flex-1">
         {filteredNotes.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 bg-card rounded-3xl border-2 border-dashed border-border mt-8 text-center max-w-2xl mx-auto h-[400px]">
-            <div className="w-20 h-20 bg-orange-500/10 rounded-full flex items-center justify-center mb-6">
-              <Plus size={40} className="text-orange-500" />
+          <div className="flex flex-col items-center justify-center p-8 sm:p-12 bg-card rounded-3xl border-2 border-dashed border-border text-center max-w-2xl mx-auto min-h-[280px] sm:min-h-[400px]">
+            <div className="w-16 sm:w-20 h-16 sm:h-20 bg-orange-500/10 rounded-full flex items-center justify-center mb-4 sm:mb-6">
+              <Plus size={32} className="text-orange-500" />
             </div>
-            <h3 className="text-2xl font-bold text-foreground mb-2">No se encontraron notas</h3>
-            <p className="text-muted-foreground text-lg mb-8 max-w-md">No tienes notas creadas o ninguna coincide con los filtros aplicados.</p>
+            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2">No se encontraron notas</h3>
+            <p className="text-muted-foreground text-base mb-6 max-w-md">Crea una nota o ajusta los filtros.</p>
             {notes.length === 0 && (
               <button 
                 onClick={handleCreate}
-                className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full hover:scale-105 transition-all font-bold shadow-lg shadow-orange-500/30 text-lg"
+                className="flex items-center gap-2 px-5 py-2.5 bg-orange-500 text-white rounded-full hover:scale-105 transition-all font-bold shadow-lg shadow-orange-500/30"
               >
-                <Plus size={24} /> Escribir mi primera nota
+                <Plus size={20} /> Escribir mi primera nota
               </button>
             )}
           </div>
         ) : (
-          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6 pb-12">
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 space-y-5 pb-12">
             {filteredNotes.map(n => (
               <div key={n.id} className="break-inside-avoid">
                 <NoteCard note={n} onEdit={(note) => { setNoteToEdit(note); setIsFormOpen(true); }} />

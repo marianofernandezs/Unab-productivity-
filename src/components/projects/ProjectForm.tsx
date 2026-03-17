@@ -23,7 +23,7 @@ export default function ProjectForm({ onClose, projectToEdit }: ProjectFormProps
     if (projectToEdit) {
       setName(projectToEdit.name);
       setDescription(projectToEdit.description);
-      setDeadline(projectToEdit.deadline.split('T')[0]); // get YYYY-MM-DD
+      setDeadline(projectToEdit.deadline.split('T')[0]);
       setStatus(projectToEdit.status);
       setColor(projectToEdit.color);
     } else {
@@ -44,7 +44,6 @@ export default function ProjectForm({ onClose, projectToEdit }: ProjectFormProps
     }
 
     if (projectToEdit) {
-      // Regla: Proyecto completado no puede tener tareas pendientes (handled down stream or ignore for now)
       updateProject(projectToEdit.id, {
         name,
         description,
@@ -65,16 +64,16 @@ export default function ProjectForm({ onClose, projectToEdit }: ProjectFormProps
   };
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card w-full max-w-md rounded-2xl shadow-xl border border-border p-6 relative animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div className="bg-card w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl shadow-xl border border-border p-5 sm:p-6 relative animate-in slide-in-from-bottom-8 sm:zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors p-1"
         >
-          <X size={24} />
+          <X size={22} />
         </button>
         
-        <h2 className="text-2xl font-bold text-foreground mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-5">
           {projectToEdit ? 'Editar Proyecto' : 'Nuevo Proyecto'}
         </h2>
         
@@ -85,7 +84,7 @@ export default function ProjectForm({ onClose, projectToEdit }: ProjectFormProps
               type="text" 
               value={name}
               onChange={e => setName(e.target.value)}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-primary outline-none"
+              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground focus:ring-2 focus:ring-primary outline-none"
               placeholder="Ej. Rediseño App"
             />
             {error && <p className="text-destructive text-sm mt-1 animate-in slide-in-from-top-1">{error}</p>}
@@ -96,19 +95,19 @@ export default function ProjectForm({ onClose, projectToEdit }: ProjectFormProps
             <textarea 
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground focus:ring-2 focus:ring-primary outline-none resize-none h-24"
+              className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground focus:ring-2 focus:ring-primary outline-none resize-none h-20"
               placeholder="Detalles del proyecto..."
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-foreground mb-1">Fecha Límite *</label>
               <input 
                 type="date" 
                 value={deadline}
                 onChange={e => setDeadline(e.target.value)}
-                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground outline-none resize-none color-scheme-dark"
+                className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground outline-none"
                 style={{ colorScheme: 'dark light' }}
               />
             </div>
@@ -117,7 +116,7 @@ export default function ProjectForm({ onClose, projectToEdit }: ProjectFormProps
               <select 
                 value={status}
                 onChange={e => setStatus(e.target.value as ProjectStatus)}
-                className="w-full bg-background border border-border rounded-xl px-4 py-2 text-foreground outline-none"
+                className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground outline-none"
               >
                 <option value="active">Activo</option>
                 <option value="on-hold">En Pausa</option>
@@ -142,17 +141,17 @@ export default function ProjectForm({ onClose, projectToEdit }: ProjectFormProps
             </div>
           </div>
 
-          <div className="pt-4 flex justify-end gap-3">
+          <div className="pt-3 flex justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-muted-foreground hover:bg-secondary transition-colors font-medium"
+              className="px-4 py-2.5 rounded-xl text-muted-foreground hover:bg-secondary transition-colors font-medium text-sm"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium shadow-sm shadow-primary/20"
+              className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium shadow-sm shadow-primary/20 text-sm"
             >
               {projectToEdit ? 'Guardar Cambios' : 'Crear Proyecto'}
             </button>

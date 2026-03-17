@@ -70,42 +70,42 @@ export default function NoteForm({ onClose, noteToEdit }: NoteFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div 
-        className="w-full max-w-lg rounded-2xl shadow-xl transition-colors duration-200 border border-black/10 flex flex-col max-h-[90vh] animate-in zoom-in-95"
+        className="w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-xl border border-black/10 flex flex-col max-h-[92vh] animate-in slide-in-from-bottom-8 sm:zoom-in-95 duration-200"
         style={{ backgroundColor: color }}
       >
         <div className="flex items-center justify-between p-4 border-b border-black/10">
-          <h2 className="text-xl font-bold text-foreground mix-blend-difference">{noteToEdit ? 'Editar Nota' : 'Nueva Nota'}</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-foreground mix-blend-difference">{noteToEdit ? 'Editar Nota' : 'Nueva Nota'}</h2>
           <button onClick={onClose} className="p-2 hover:bg-black/10 rounded-full transition-colors">
             <X size={20} className="text-foreground mix-blend-difference" />
           </button>
         </div>
 
-        <form id="note-form" onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1 flex flex-col gap-4">
+        <form id="note-form" onSubmit={handleSubmit} className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-4">
           <input 
             type="text"
             value={title}
             onChange={e => setTitle(e.target.value)}
             placeholder="Título"
-            className="w-full bg-transparent text-2xl font-bold placeholder-black/40 outline-none text-foreground mix-blend-difference"
+            className="w-full bg-transparent text-xl sm:text-2xl font-bold placeholder-black/40 outline-none text-foreground mix-blend-difference"
           />
           
           <textarea
             value={content}
             onChange={e => setContent(e.target.value)}
             placeholder="Escribe tu nota aquí..."
-            className="w-full bg-transparent text-lg min-h-[150px] resize-none placeholder-black/40 outline-none flex-1 text-foreground mix-blend-difference leading-relaxed"
+            className="w-full bg-transparent text-base sm:text-lg min-h-[120px] sm:min-h-[160px] resize-none placeholder-black/40 outline-none flex-1 text-foreground mix-blend-difference leading-relaxed"
           />
 
-          <div className="flex items-center gap-2 mt-2">
-            <Tag size={16} className="text-foreground mix-blend-difference opacity-50" />
+          <div className="flex items-start gap-2 mt-1">
+            <Tag size={15} className="text-foreground mix-blend-difference opacity-50 mt-1 shrink-0" />
             <div className="flex flex-wrap gap-2 flex-1">
               {tags.map(t => (
                 <span key={t} className="px-2 py-1 bg-black/10 rounded-md text-xs font-semibold flex items-center gap-1 text-foreground mix-blend-difference">
                   {t}
                   <button type="button" onClick={() => removeTag(t)} className="hover:text-red-500 transition-colors">
-                    <X size={12} />
+                    <X size={10} />
                   </button>
                 </span>
               ))}
@@ -116,14 +116,14 @@ export default function NoteForm({ onClose, noteToEdit }: NoteFormProps) {
                 onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
                 onBlur={addTag}
                 placeholder="Añadir etiqueta"
-                className="bg-transparent text-sm w-32 placeholder-black/40 outline-none text-foreground mix-blend-difference"
+                className="bg-transparent text-sm w-28 placeholder-black/40 outline-none text-foreground mix-blend-difference"
               />
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-black/10 grid md:grid-cols-2 gap-4 items-end">
+          <div className="mt-3 pt-4 border-t border-black/10 grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
             <div>
-              <label className="block text-xs font-bold text-foreground mix-blend-difference opacity-70 mb-1 pointer-events-none">Color</label>
+              <label className="block text-xs font-bold text-foreground mix-blend-difference opacity-70 mb-1.5">Color</label>
               <div className="flex gap-1.5 flex-wrap">
                 {palette.map(c => (
                   <button
@@ -138,7 +138,7 @@ export default function NoteForm({ onClose, noteToEdit }: NoteFormProps) {
             </div>
             
             <div>
-              <label className="block text-xs font-bold text-foreground mix-blend-difference opacity-70 mb-1 pointer-events-none">Proyecto (Opcional)</label>
+              <label className="block text-xs font-bold text-foreground mix-blend-difference opacity-70 mb-1.5">Proyecto (Opcional)</label>
               <select
                 value={projectId}
                 onChange={e => setProjectId(e.target.value)}
@@ -154,8 +154,8 @@ export default function NoteForm({ onClose, noteToEdit }: NoteFormProps) {
         </form>
 
         <div className="p-4 border-t border-black/10 flex justify-end gap-3 bg-black/5 rounded-b-2xl">
-          <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-foreground font-semibold hover:bg-black/10 transition-colors mix-blend-difference">Cancelar</button>
-          <button type="submit" form="note-form" className="px-5 py-2 rounded-xl bg-primary text-primary-foreground font-bold hover:shadow-lg transition-all active:scale-95 shadow-primary/20">Guardar Nota</button>
+          <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-foreground font-semibold hover:bg-black/10 transition-colors mix-blend-difference text-sm">Cancelar</button>
+          <button type="submit" form="note-form" className="px-5 py-2 rounded-xl bg-primary text-primary-foreground font-bold hover:shadow-lg transition-all active:scale-95 shadow-primary/20 text-sm">Guardar</button>
         </div>
       </div>
     </div>
